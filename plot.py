@@ -1,3 +1,8 @@
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["matplotlib"]
+# ///
+
 import csv
 from datetime import datetime
 import matplotlib
