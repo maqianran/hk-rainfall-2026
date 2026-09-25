@@ -1,34 +1,28 @@
-# The phenomenon
+# Hong Kong Rainfall Visualisation (1884–2026)
 
-<!-- This is the SD5913 assignment 2 template. Everything in this file is yours to
-replace, and the check counts words: comments like this one are not words, so
-delete each one as you write. Start with the heading: name the phenomenon.
+## What is this?
+This repository visualises daily total rainfall data from the Hong Kong Observatory, covering over 140 years of records. The data was downloaded from the Hong Kong Government's open data portal.
 
-Then, in this order, at least 150 words in total.
+## How to run
+1. Fetch the raw data:
+   `uv run fetch.py`
+2. Preview the data structure:
+   `python3 preview.py`
+3. Generate the plot:
+   `python3 plot.py`
 
-New to folders, paths, or the files here whose names start with a dot? Read
-https://github.com/sd5913/pfad/blob/2026/reference/files.md first. Ten minutes. -->
+## The picture
+![Rainfall plot](out/plot.png)
 
-![what the picture is](out/plot.png)
+## What does it show?
+The plot shows the daily total rainfall in Hong Kong over the last 3 years. Large spikes represent heavy rainstorms, while flat lines indicate dry periods. 
 
-## The phenomenon
+## What does it hide?
+**The compression of 140 years of data.** By drawing a single continuous line, the chart treats an extreme, life-threatening black rainstorm the same as a light drizzle—both become a thin spike on a massive timeline. It also hides gaps in historical data (e.g., missing records during wartime) and masks the fact that daily averages have shifted over decades. 
 
-<!-- What goes up and down, and why you looked at it. -->
+## Data Source
+Hong Kong Observatory Open Data (daily total rainfall): https://data.weather.gov.hk/weatherAPI/opendata/opendata/csv/daily_rainfall.csv
 
-## The source
-
-<!-- A link to the page or endpoint the file came from, and one line on what is in
-the file: how many rows, what a row means, what the units are. -->
-
-## What the picture shows
-
-<!-- Two or three sentences. Including what it hides: every transformation throws
-something away, and naming what yours threw away is the easiest way to sound like
-you know what you did. -->
-
-## Run it
-
-```
-uv run fetch.py
-uv run plot.py
-```
+## References
+- Hong Kong Observatory. (2026). *Daily Total Rainfall*. Retrieved from https://data.weather.gov.hk/
+- Matplotlib Development Team. (2026). *Matplotlib Documentation*. https://matplotlib.org/
