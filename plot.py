@@ -1,67 +1,49 @@
-# /// script
-# requires-python = ">=3.10"
-# dependencies = ["matplotlib"]
-# ///
-
-"""
-Read the file in data/, make one picture, save it to out/.
-
-    uv run plot.py
-
-Three parts, and you will replace all three: rows() reads the file the way *your*
-file needs reading, the loop in main() picks the numbers out of it, and the plot at
-the bottom is the transformation you chose. Print before you plot.
-"""
-
 import csv
+from datetime import datetime
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端，确保在没有窗口的情况下也能保存图片
+import matplotlib.pyplot as plt
 from pathlib import Path
 
-import matplotlib.pyplot as plt
+# 1. 确保输出文件夹存在
+Path("out").mkdir(exist_ok=True)
+print("开始读取数据...")
 
-FILE = "hko-daily-mean-temperature-2026.csv"   # CHANGE ME: the same name as in fetch.py
-PICTURE = "plot.png"                           # what goes into out/, and into the README
+dates = []
+rainfalls = []
 
-HERE = Path(__file__).parent
-DATA = HERE / "data" / FILE
-OUT = HERE / "out"
+# 2. 读取数据
+with open("data/daily_rainfall.csv", "r", encoding="utf-8-sig") as f:
+    reader = csv.reader(f)
+    next(reader) # 跳过第1行标题
+    next(reader) # 跳过第2行标题
+    next(reader) # 跳过第3行副标题
+    
+    for row in reader:
+        if not row: continue
+        try:
+            year, month, day, value = row[0], row[1], row[2], row[3]
+            rain_val = float(value)
+            dates.append(datetime(int(year), int(month), int(day)))
+            rainfalls.append(rain_val)
+        except (ValueError, IndexError):
+            continue # 跳过无法解析的行
 
+print(f"数据读取完成，共 {len(dates)} 条有效记录。")
 
-def rows(path):
-    """The file as a list of lists, one per line. The Observatory puts three lines
-    of titles above the table and a legend below it, so keep only the lines that
-    start with a year."""
-    kept = []
-    with path.open(encoding="utf-8-sig", newline="") as handle:
-        for line in csv.reader(handle):
-            if line and line[0].isdigit():
-                kept.append(line)
-    return kept
+# 3. 只画最近3年的数据
+dates = dates[-365*3:]
+rainfalls = rainfalls[-365*3:]
 
+# 4. 开始绘图
+print("开始绘图...")
+plt.figure(figsize=(12, 5))
+plt.plot(dates, rainfalls, color='blue', linewidth=0.8)
+plt.title("Hong Kong Observatory Daily Total Rainfall (Last 3 Years)")
+plt.xlabel("Date")
+plt.ylabel("Rainfall (mm)")
+plt.grid(True, alpha=0.3)
 
-def main():
-    table = rows(DATA)
-    print(f"{DATA.name}: {len(table)} rows. The first one: {table[0]}")
-
-    days, values = [], []
-    for i, (year, month, day, value, quality) in enumerate(table):   # the loop over the numbers
-        if value == "***":                   # the Observatory's word for "missing"
-            continue
-        days.append(i + 1)
-        values.append(float(value))          # it arrived as text; make it a number
-    print(f"{len(values)} values, from {min(values)} to {max(values)}")
-
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.plot(days, values, color="#d6591d", linewidth=1.5)
-    ax.set_xlabel("day of 2026")
-    ax.set_ylabel("daily mean temperature, °C")
-    ax.set_title("Hong Kong Observatory, 2026 so far")
-    fig.tight_layout()
-
-    OUT.mkdir(exist_ok=True)
-    fig.savefig(OUT / PICTURE, dpi=150)
-    print(f"saved out/{PICTURE}")
-    plt.show()
-
-
-if __name__ == "__main__":
-    main()
+# 5. 保存图片
+plt.savefig("out/plot.png")
+print("绘图成功！图片已保存到 out/plot.png")
