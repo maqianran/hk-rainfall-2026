@@ -39,6 +39,7 @@ rainfalls = rainfalls[-365*3:]
 print("开始绘图...")
 plt.figure(figsize=(12, 5))
 plt.plot(dates, rainfalls, color='blue', linewidth=0.8)
+plt.fill_between(dates, rainfalls, color='blue', alpha=0.15)
 plt.title("Hong Kong Observatory Daily Total Rainfall (Last 3 Years)")
 plt.xlabel("Date")
 plt.ylabel("Rainfall (mm)")
