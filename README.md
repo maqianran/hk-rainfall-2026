@@ -11,8 +11,15 @@ This repository visualises daily total rainfall data from the Hong Kong Observat
 3. Generate the plot:
    `python3 plot.py`
 
-## The picture
+## Visualisations
+
+### Animated version
 ![Rainfall animation](out/rainfall.gif)
+
+### Static version
+![Rainfall plot](out/plot.png)
+
+*Note: The animated version uses a 30-day sliding window to show the changes in daily rainfall over the last year, making it easier to see the sequence of wet and dry periods.*
 
 ## What does it show?
 The plot shows the daily total rainfall in Hong Kong over the last 3 years. Large spikes represent heavy rainstorms, while flat lines indicate dry periods. 
